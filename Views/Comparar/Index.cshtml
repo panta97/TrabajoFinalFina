@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNet.Identity
+@model System.Decimal
+
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @Scripts.Render("~/bundles/chart")
+
+}
+
+<h2>Total:  </h2> <h2 style="color: red">@Model.ToString()</h2>
+
+<div class="container" style="position: relative;">
+    <canvas id="canvas"></canvas>
+</div>
+
+@section scripts
+{
+    <script>
+
+        $(function() {
+            $.ajax({
+                type: "GET",
+                url: "/api/comparar/2017/" + "@User.Identity.GetUserId()",
+                success: function(data) {
+
+                    console.log(data.ingresos);
+
+                    var color = Chart.helpers.color;
+                    var barChartData = {
+                        labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Otubre","Noviembre", "Diciembre"],
+                        datasets: [{
+                            label: 'Ingresos',
+                            backgroundColor: "rgba(138,197,242,1)",
+                            borderColor: "rgba(45,143,230,1)",
+                            borderWidth: 1,
+                            data: data.ingresos
+                        }, {
+                            label: 'Gastos',
+                            backgroundColor: "rgba(253,159,180,1)",
+                            borderColor: "rgba(252,72,113,1)",
+                            borderWidth: 1,
+                            data: data.gastos
+                        }]
+
+                    };
+
+                        var ctx = document.getElementById("canvas").getContext("2d");
+                        window.myBar = new Chart(ctx, {
+                            type: 'bar',
+                            data: barChartData,
+                            options: {
+                                responsive: true,
+                                legend: {
+                                    position: 'top'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Flujo de caja anual',
+                                    fontSize: 30
+                                }
+                            }
+                        });
+                }
+            });
+        });
+
+
+    </script>
+
+}

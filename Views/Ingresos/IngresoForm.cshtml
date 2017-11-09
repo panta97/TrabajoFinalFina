@@ -1,0 +1,99 @@
+﻿@model Cashflow.ViewModels.FlujoFormViewModel
+
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Nuevo Ingreso</h2>
+
+
+<div class="row">
+<div class="col-md-5">
+@using (Html.BeginForm("Save", "Ingresos"))
+{
+    <div class="form-group">
+        @Html.LabelFor(i => i.Flujo.Nombre)
+        @Html.TextBoxFor(i => i.Flujo.Nombre, new {@class = "form-control"})
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(i => i.Flujo.Monto)
+        @Html.TextBoxFor(i => i.Flujo.Monto, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(i => i.Flujo.Fecha)
+        <div class='input-group date' id='datetimepicker1'>
+            @Html.TextBoxFor(i => i.Flujo.Fecha, "{0:MM/dd/yy}", new {@class = "form-control"})
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.Flujo.PeriodoId)
+        @Html.DropDownListFor(p => p.Flujo.PeriodoId, new SelectList(Model.Periodos, "Id", "Nombre"), null, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(i => i.Flujo.FechaFin)
+        <div class='input-group date' id='datetimepicker2'>
+            @Html.TextBoxFor(i => i.Flujo.FechaFin, "{0:MM/dd/yy}", new {@class = "form-control end-date"})
+            @*<input  id="end-date" type='text' class="form-control" disabled/>*@
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+
+
+    @Html.HiddenFor(i => i.Flujo.Id)
+
+    <button type="submit" class="btn btn-green">Guardar</button>
+}
+</div>
+
+</div>
+@section scripts
+{
+    @Scripts.Render("~/bundles/datetime/scripts")
+    <script type="text/javascript">
+        
+        var date = "@Model.Flujo.Fecha.Date";
+
+
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YY',
+                defaultDate: new Date(date)
+            });
+        });
+
+        $(function () {
+            $('#datetimepicker2').datetimepicker({
+                format: 'MM/DD/YY',
+                defaultDate: new Date(date)
+            });
+        });
+
+//        $(document).ready(function() {
+//
+//            $('#Flujo_PeriodoId').change(function() {
+//                var selectedOption = $('#Flujo_PeriodoId option:selected');
+//                console.log(selectedOption.val());
+//                if (selectedOption.val() == 1) {
+//                    $('.end-date').prop('disabled', true);
+//                    var formatDate = date.split(" ");
+//                    $('.end-date').val(formatDate[0]);
+//                } else {
+//                    $('.end-date').prop('disabled', false);
+//                }
+//            });
+//        });
+
+
+    </script>
+}

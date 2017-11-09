@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<Cashflow.Models.Flujo>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-bottom: 30px" class="row">
+    <div style="padding-left: 0px; padding-right: 0px" class="col-md-12">
+        <h1 class="pull-left">Gastos</h1>
+        <h1 class="pull-right">@Html.ActionLink("Nuevo", "New", "Gastos", null, new { @class = "" })</h1>
+    </div>
+</div>
+
+<div class="row">
+    <table id="gastos" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Monto</th>
+            <th>Periodo</th>
+            <th>Eliminar</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+        </tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            var table = $('#gastos').DataTable({
+                language: language_spanish,
+                ajax: {
+                    url: "/api/gastos/user/" + "@User.Identity.GetUserId()",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "nombre",
+                        render: function(data, type, gasto) {
+                            return "<a href='/gastos/edit/" + gasto.id + "'>" + gasto.nombre + "</a>";
+                        }
+                    },
+                    {
+                        data: "monto"
+                    },
+                    {
+                        data: "periodo.nombre"
+                    },
+                    {
+                        data: "id",
+                        render: function(data) {
+                            return "<a href='#' data-gasto-id='" + data + "' class='js-delete'>Eliminar</a>";
+                        }
+                    }
+                ]
+
+            });
+
+            $('#gastos').on("click",
+                '.js-delete',
+                function() {
+                    var anchor = $(this);
+
+                    bootbox.confirm("¿Seguro que quieres eliminar este gasto?",
+                        function(result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/gastos/" + anchor.attr("data-gasto-id"),
+                                    method: "DELETE",
+                                    success: function() {
+                                        table.row(anchor.parents("tr")).remove().draw();
+                                    }
+                                });
+                            }
+                        });
+                });
+        });
+    </script>
+}

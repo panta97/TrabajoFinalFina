@@ -1,0 +1,79 @@
+﻿@using Microsoft.Ajax.Utilities
+@model Cashflow.ViewModels.FlujoFormViewModel
+
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Nuevo Gasto</h2>
+
+@using (Html.BeginForm("Save", "Gastos"))
+{
+    <div class="form-group">
+        @Html.LabelFor(i => i.Flujo.Nombre)
+        @Html.TextBoxFor(i => i.Flujo.Nombre, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(i => i.Flujo.Monto)
+        @Html.TextBoxFor(i => i.Flujo.Monto, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(i => i.Flujo.Fecha)
+        <div class='input-group date' id='datetimepicker1'>
+            @Html.TextBoxFor(i => i.Flujo.Fecha, "{0:MM/dd/yy}", new { @class = "form-control" })
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.Flujo.PeriodoId)
+        @Html.DropDownListFor(p => p.Flujo.PeriodoId, new SelectList(Model.Periodos, "Id", "Nombre"), "Seleccione periodo", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(i => i.Flujo.FechaFin)
+        <div class='input-group date' id='datetimepicker2'>
+            @Html.TextBoxFor(i => i.Flujo.FechaFin, "{0:MM/dd/yy}", new { @class = "form-control end-date" })
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+
+
+    @Html.HiddenFor(i => i.Flujo.Id)
+
+    <button type="submit" class="btn btn-green">Guardar</button>
+}
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/datetime/scripts")
+    <script type="text/javascript">
+
+        var date = "@Model.Flujo.Fecha.Date";
+
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YY',
+                defaultDate: new Date(date)
+            });
+        });
+
+        $(function () {
+            $('#datetimepicker2').datetimepicker({
+                format: 'MM/DD/YY',
+                defaultDate: new Date(date)
+            });
+        });
+    </script>
+}
+
+

@@ -1,0 +1,34 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Flow</title>
+
+    
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans|Candal|Alegreya+Sans">
+    
+    @Styles.Render("~/bundles/mentor/css")
+ 
+</head>
+<body>
+@Html.Partial("_NavBar")
+
+    <section style="background-color: aqua">
+@RenderBody()
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Cash Flow</p>
+    </footer>
+    
+    </section>
+    
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+@Scripts.Render("~/bundles/mentor/scripts")
+   
+</body>
+</html>
